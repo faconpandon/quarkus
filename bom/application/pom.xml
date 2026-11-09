@@ -30,6 +30,9 @@
         <resteasy-spring-web.version>3.2.0.Final</resteasy-spring-web.version>
         <resteasy.version>6.2.19.Final</resteasy.version>
         <opentelemetry-instrumentation.version>2.28.1-alpha</opentelemetry-instrumentation.version> <!-- OTel SDk 1.62.0-->
+        <!-- Custom OTel Java build: 1.62.0 + backported fix for CVE-2026-118259 (open-telemetry/opentelemetry-java#8914) -->
+        <opentelemetry.version>1.62.0-cve-2026-118259</opentelemetry.version>
+        <opentelemetry-alpha.version>1.62.0-cve-2026-118259-alpha</opentelemetry-alpha.version>
         <opentelemetry-semconv.version>1.40.0-alpha</opentelemetry-semconv.version>
         <quarkus-http.version>5.5.0</quarkus-http.version>
         <micrometer.version>1.17.1</micrometer.version><!-- keep in sync with hdrhistogram: https://central.sonatype.com/artifact/io.micrometer/micrometer-core -->
@@ -481,6 +484,22 @@
                 <version>${opensearch-testcontainers.version}</version>
             </dependency>
             <!-- OpenTelemetry components, imported as a BOM -->
+            <!-- Override the OTel Java BOMs imported by opentelemetry-instrumentation-bom-alpha with a custom build -->
+            <!-- that backports the CVE-2026-118259 fix. Must be imported before opentelemetry-instrumentation-bom-alpha. -->
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom</artifactId>
+                <version>${opentelemetry.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom-alpha</artifactId>
+                <version>${opentelemetry-alpha.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- opentelemetry-instrumentation-bom-alpha includes the main and alpha-bom inside.-->
             <!-- Also includes semantic conventions-->
             <dependency>
